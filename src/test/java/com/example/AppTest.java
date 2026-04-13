@@ -19,14 +19,19 @@ public class AppTest {
     @Before
     public void setUp() {
 
-        // Automatically manages ChromeDriver (NO manual path needed)
+        // Automatically download & setup ChromeDriver
         WebDriverManager.chromedriver().setup();
 
-        // Headless Chrome setup (important for Jenkins)
+        // Chrome options for Jenkins (Headless + Stability fixes)
         ChromeOptions options = new ChromeOptions();
+
         options.addArguments("--headless=new");
         options.addArguments("--disable-gpu");
         options.addArguments("--window-size=1920,1080");
+
+        // VERY IMPORTANT for Jenkins/Linux
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
 
         driver = new ChromeDriver(options);
     }
@@ -46,7 +51,7 @@ public class AppTest {
         // Click login
         driver.findElement(By.id("submit")).click();
 
-        // Wait for page to load
+        // Wait for page load
         Thread.sleep(2000);
 
         // Validate login success
